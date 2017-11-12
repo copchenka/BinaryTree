@@ -182,8 +182,34 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @NotNull
     @Override
     public SortedSet<T> tailSet(T fromElement) {
-        throw new UnsupportedOperationException();
+        SortedSet<T> subtree = new TreeSet<>();
+        Node<T> node = root;
+        if (fromElement == null) throw new NullPointerException();
+        else {
+            if (node.value == null) throw new NoSuchElementException();
+            else {
+                if (node.value.compareTo(fromElement) > 0) {
+                    subtree.add(node.value);
+                    if (node.right != null) {
+                        subtree.add((node.right).value);
+                        subH(node.right, subtree);
+                    }
+                    if (node.left != null)
+                        node = node.left;
+                } else if (node.value.compareTo(fromElement) < 0) {
+                    if (node.right != null)
+                        node = node.right;
+                } else if (node.value.compareTo(fromElement) == 0) {
+                    if (node.right != null) {
+                        subtree.add((node.right).value);
+                        subH(node.right, subtree);
+                    }
+                }
+            }
+        }
+        return subtree;
     }
+
 
     @Override
     public T first() {
